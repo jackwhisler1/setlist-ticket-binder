@@ -3,21 +3,31 @@ import './App.css';
 import React, { useState, useEffect } from 'react';
 
 function App() {
-  const [data, setData] = useState(null);
-  const apiKey = process.env.SETLIST_API_KEY;
-
+  const [setlist, setSetlist] = useState(null);
+  const apiKey = process.env.SET
+  const url = 'https://api.setlist.fm/rest/1.0/search/artists?artistName=radiohead&p=1&sort=sortName'; 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchSetlist = async () => {
       try {
-        const response = await fetch('https://api.example.com/data');
+               
+        console.log(apiKey);
+
+        console.log(url);
+        const headers = {
+          'x-api-key': apiKey,
+          'Accept': 'application/json',
+          'Accept-Language': 'en', // You can change this to your preferred language
+        };
+
+        const response = await fetch(url, { headers });
         const result = await response.json();
-        setData(result);
+        setSetlist(result);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching setlist:', error);
       }
     };
 
-    fetchData();
+    fetchSetlist();
   }, []);
 
   return (
@@ -26,12 +36,12 @@ function App() {
          Setlist Sandbox
         </p>
         <div>
-      {data ? (
-        <p>Data: {JSON.stringify(data)}</p>
+      {setlist ? (
+        <p>Setlist: {JSON.stringify(setlist)}</p>
       ) : (
         <p>Loading...</p>
       )}
-        </div>
+    </div>
     </div>
   );
 }
